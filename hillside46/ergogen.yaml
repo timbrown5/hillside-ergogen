@@ -1,0 +1,322 @@
+meta:
+  engine: 4.1.0
+units:
+  # use for Choc spaced keys
+  #spacing_x: cx
+  #spacing_y: cy
+  # use for MX spaced keys
+  spacing_x: U
+  spacing_y: U
+points:
+  zones:
+    matrix:
+      anchor.shift: [50,-100] # Fix KiCad placement
+      columns:
+        outer:
+          key:
+            spread: spacing_x
+            splay: 15
+            origin: [0, -spacing_y]
+            column_net: C0
+          rows:
+            bottom:
+              row_net: R0
+              bind: [10, 10, 0, 0]
+            home:
+              row_net: R1
+              bind: [10, 10, 10, 0]
+            top:
+              row_net: R2
+              bind: [0, 10, 10, 0]
+        pinky:
+          key:
+            spread: spacing_x
+          rows:
+            bottom:
+              row_net: R0
+              bind: [10, 10, 0, 10]
+            home:
+              row_net: R1
+              bind: [10, 10, 10, 10]
+            top:
+              row_net: R2
+              bind: [0, 20, 10, 10]
+        ring:
+          key:
+            spread: spacing_x
+            stagger: 13
+            splay: -5
+          rows:
+            bottom:
+              row_net: R0
+              bind: [5, 15, 14, 0]
+            home:
+              row_net: R1
+              bind: [10, 10, 10, 0]
+            top:
+              row_net: R2
+              bind: [0, 20, 10, 0]
+        middle:
+          key:
+            spread: spacing_x
+            stagger: 6
+            splay: -5
+          rows:
+            bottom:
+              row_net: R0
+              bind: [10, 10, 0, 0]
+            home:
+              row_net: R1
+              bind: [10, 10, 10, 0]
+            top:
+              row_net: R2
+              bind: [0, 0, 10, 0]
+        index:
+          key:
+            spread: spacing_x
+            stagger: -5
+          rows:
+            bottom:
+              row_net: R0
+              bind: [10, 10, 0, 0]
+            home:
+              row_net: R1
+              bind: [10, 10, 10, 0]
+            top:
+              row_net: R2
+              bind: [0, 0, 0, 0]
+        inner:
+          key:
+            spread: spacing_x
+            stagger: -2.5
+          rows:
+            bottom:
+              row_net: R0
+              bind: [10, 25, 0, 0]
+            home:
+              row_net: R1
+              bind: [10, 25, 10, 0]
+            top:
+              row_net: R2
+              bind: [0, 22, 10, 0]
+    thumb:
+      anchor:
+        ref: matrix_index_bottom
+        shift: [-10.5,-spacing_y]
+      columns:
+        palm:
+          key:
+            splay: 0
+            bind: [10, 45, 0, 0]
+          rows:
+            only:
+              column_net: C1
+              row_net: R3
+        inner:
+          key:
+            splay: -15
+            origin: [-spacing_x/2, -7]
+            bind: [10, 10, 0, 2]
+          rows:
+            only:
+              column_net: C2
+              row_net: R3
+        home:
+          key:
+            splay: -15
+            origin: [-spacing_x/2, -7]
+            bind: [10, 15, 0, 0]
+          rows:
+            only:
+              column_net: C3
+              row_net: R3
+        upper:
+          key:
+            shift: [-spacing_x, spacing_y]
+            bind: [0, 10, 0, 0]
+          rows:
+            only:
+              column_net: C4
+              row_net: R3
+        outer:
+          key:
+            #shift: [0, 0]
+            origin: [-spacing_x, spacing_y]
+            shift: [-12, -2]
+            bind: [2, 0, 0, 5]
+            splay: -15
+          rows:
+            only:
+              column_net: C5
+              row_net: R3
+      rows:
+        only:
+          padding: spacing_y
+      key:
+        footprints:
+outlines:
+  _raw:
+    - what: rectangle
+      where: true
+      bound: true
+      asym: left
+      size: [spacing_x,spacing_y]
+      corner: 1
+  _first:
+    - what: outline
+      name: _raw
+      fillet: 3
+  _second:
+    - what: outline
+      name: _first
+      fillet: 9 
+  _third:
+    - what: outline
+      name: _second
+      fillet: 3
+  bottom:
+    - what: outline
+      name: _third
+      fillet: 9
+  _key_slot_negative:
+    - what: rectangle
+      where: true
+      size: 13.8
+  _key_snap:
+    - what: outline
+      name: _key_slot_negative
+      expand: 1.2
+    - what: outline
+      name: _key_slot_negative
+      operation: subtract
+  _prototype_plate:
+    - what: outline
+      name: bottom
+    - what: outline
+      name: _key_slot_negative
+      operation: subtract
+  _mounting_plate:
+    - what: hull
+      points: 
+        - matrix_outer_bottom
+        - matrix_outer_home
+        - matrix_outer_top
+        - matrix_pinky_bottom
+        - matrix_pinky_home
+        - matrix_pinky_top
+        - matrix_ring_bottom
+        - matrix_ring_home
+        - matrix_ring_top
+        - matrix_middle_bottom
+        - matrix_middle_home
+        - matrix_middle_top
+        - matrix_index_bottom
+        - matrix_index_home
+        - matrix_index_top
+        - matrix_inner_bottom
+        - matrix_inner_home
+        - matrix_inner_top
+        - thumb_palm_only
+        - thumb_inner_only
+        - thumb_upper_only
+        - thumb_home_only
+        - thumb_outer_only
+      concavity: 50
+      expand: -0.5
+    - what: outline
+      name: bottom
+      operation: intersect
+      fillet: 9
+    - what: outline
+      name: _key_slot_negative
+      operation: subtract
+pcbs:
+  architeuthis_dux:
+    template: kicad8
+    outlines:
+      main:
+        outline: bottom
+    footprints:
+      choc_hotswap:
+        what: ceoloide/switch_choc_v1_v2
+        where: true
+        params:
+          from: =column_net
+          to: GND
+          include_corner_marks: true
+          include_keycap: true
+          keycap_height: 16.5
+          keycap_width: 17.5
+          reversible: true
+          solder: true
+          hotswap: true
+          choc_v2_support: false
+          outer_pad_width_front: 2.0
+          outer_pad_width_back: 2.0
+      mcu:
+        what: ceoloide/mcu_supermini_nrf52840
+        where:
+          ref: matrix_inner_home
+        params:
+          reverse_mount: true
+          reversible: true
+          only_required_jumpers: true
+        adjust:
+          shift: [spacing_x+2,9]
+      oled:
+        what: ceoloide/display_ssd1306
+        where:
+          ref: matrix_inner_home
+        params:
+          reversible: true
+        adjust:
+          shift: [spacing_x+2,6]
+      reset:
+        what: ceoloide/reset_switch_smd_side
+        where:
+          ref: thumb_upper_only
+          rotate: -60
+        params:
+          reversible: true
+        adjust:
+          shift: [-20,13]
+      trrs:
+        what: ceoloide/trrs_pj320a
+        where:
+          ref: thumb_palm_only
+          shift: [spacing_x*3 + 12, -6]
+          rotate: -90
+        params:
+          SL: GND
+          R2: P2
+          TP: VCC # Tip and Ring 1 are joined together
+          reversible: true
+          symmetric: true
+      jlcpcb_order_number_text:
+        what: ceoloide/utility_text
+        where: matrix_middle_bottom
+        params:
+          text: JLCJLCJLCJLC
+          reversible: true
+        adjust:
+          shift: [0, -spacing_x/2]
+      ergogen_logo:
+        what: ceoloide/utility_ergogen_logo
+        where: matrix_ring_bottom
+        params:
+          scale: 2.5
+          reversible: true
+        adjust:
+          shift: [3,-16]  
+cases:
+  prototype:
+    - what: outline
+      name: _prototype_plate
+      extrude: 1.6
+    - what: outline
+      name: _key_snap
+      extrude: 1.6 + 5
+  mounting_plate:
+    - what: outline
+      name: _mounting_plate
+      extrude: 1.2
