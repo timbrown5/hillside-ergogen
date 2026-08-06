@@ -7,6 +7,10 @@ units:
   # use for MX spaced keys
   spacing_x: U
   spacing_y: U
+  # Tenting 
+  tenting_layout_radius: 38
+  tenting_hole_radius: 5
+
 points:
   zones:
     matrix:
@@ -18,6 +22,7 @@ points:
             splay: 15
             origin: [0, -spacing_y]
             column_net: C0
+            tags: key
           rows:
             bottom:
               row_net: R0
@@ -31,6 +36,7 @@ points:
         pinky:
           key:
             spread: spacing_x
+            tags: key
           rows:
             bottom:
               row_net: R0
@@ -46,6 +52,7 @@ points:
             spread: spacing_x
             stagger: 13
             splay: -5
+            tags: key
           rows:
             bottom:
               row_net: R0
@@ -61,6 +68,7 @@ points:
             spread: spacing_x
             stagger: 6
             splay: -5
+            tags: key
           rows:
             bottom:
               row_net: R0
@@ -75,6 +83,7 @@ points:
           key:
             spread: spacing_x
             stagger: -5
+            tags: key
           rows:
             bottom:
               row_net: R0
@@ -84,21 +93,22 @@ points:
               bind: [10, 10, 10, 0]
             top:
               row_net: R2
-              bind: [0, 0, 0, 0]
+              bind: [1, 1, 0, 2]
         inner:
           key:
             spread: spacing_x
             stagger: -2.5
+            tags: key
           rows:
             bottom:
               row_net: R0
-              bind: [10, 25, 0, 0]
+              bind: [10, spacing_x + 9, 0, 0]
             home:
               row_net: R1
-              bind: [10, 25, 10, 0]
+              bind: [10, spacing_x + 9, 10, 0]
             top:
               row_net: R2
-              bind: [0, 22, 10, 0]
+              bind: [0, spacing_x + 5, 10, 0]
     thumb:
       anchor:
         ref: matrix_index_bottom
@@ -107,7 +117,8 @@ points:
         palm:
           key:
             splay: 0
-            bind: [10, 45, 0, 0]
+            bind: [10, 10, 0, 0]
+            tags: key
           rows:
             only:
               column_net: C1
@@ -117,6 +128,7 @@ points:
             splay: -15
             origin: [-spacing_x/2, -7]
             bind: [10, 10, 0, 2]
+            tags: key
           rows:
             only:
               column_net: C2
@@ -125,7 +137,8 @@ points:
           key:
             splay: -15
             origin: [-spacing_x/2, -7]
-            bind: [10, 15, 0, 0]
+            bind: [10, 0, 0, 0]
+            tags: key
           rows:
             only:
               column_net: C3
@@ -133,31 +146,42 @@ points:
         upper:
           key:
             shift: [-spacing_x, spacing_y]
-            bind: [0, 10, 0, 0]
+            bind: [0, 6, 0, 0]
+            tags: key
           rows:
             only:
               column_net: C4
               row_net: R3
         outer:
           key:
-            #shift: [0, 0]
             origin: [-spacing_x, spacing_y]
             shift: [-12, -2]
-            bind: [2, 0, 0, 5]
+            bind: [0, 0, 0, 5]
             splay: -15
+            tags: key
           rows:
             only:
               column_net: C5
               row_net: R3
-      rows:
-        only:
-          padding: spacing_y
-      key:
-        footprints:
+    connector:
+      anchor:
+        ref: thumb_palm_only
+        shift: [spacing_x*3 + 2, -6]
+        rotate: -90
+      columns:
+        trrs:
+          key:
+            width: 6.5
+            height: 12.2
+            bind: [0, 7.5, 8, 8]
+            tags: trrs
+            padding: 0
+            spread: 0
+            stagger: 0
 outlines:
   _raw:
     - what: rectangle
-      where: true
+      where: [key, trrs]
       bound: true
       asym: left
       size: [spacing_x,spacing_y]
@@ -169,7 +193,7 @@ outlines:
   _second:
     - what: outline
       name: _first
-      fillet: 9 
+      fillet: 9
   _third:
     - what: outline
       name: _second
@@ -221,6 +245,7 @@ outlines:
         - thumb_upper_only
         - thumb_home_only
         - thumb_outer_only
+        - connector_trrs
       concavity: 50
       expand: -0.5
     - what: outline
@@ -231,7 +256,7 @@ outlines:
       name: _key_slot_negative
       operation: subtract
 pcbs:
-  architeuthis_dux:
+  hillside46:
     template: kicad8
     outlines:
       main:
@@ -239,7 +264,7 @@ pcbs:
     footprints:
       choc_hotswap:
         what: ceoloide/switch_choc_v1_v2
-        where: true
+        where: key
         params:
           from: =column_net
           to: GND
@@ -248,9 +273,9 @@ pcbs:
           keycap_height: 16.5
           keycap_width: 17.5
           reversible: true
-          solder: true
+          solder: false
           hotswap: true
-          choc_v2_support: false
+          choc_v2_support: true
           outer_pad_width_front: 2.0
           outer_pad_width_back: 2.0
       mcu:
@@ -283,23 +308,14 @@ pcbs:
       trrs:
         what: ceoloide/trrs_pj320a
         where:
-          ref: thumb_palm_only
-          shift: [spacing_x*3 + 12, -6]
-          rotate: -90
+          ref: connector_trrs
+          shift: [0, 10]
         params:
           SL: GND
           R2: P2
           TP: VCC # Tip and Ring 1 are joined together
           reversible: true
           symmetric: true
-      jlcpcb_order_number_text:
-        what: ceoloide/utility_text
-        where: matrix_middle_bottom
-        params:
-          text: JLCJLCJLCJLC
-          reversible: true
-        adjust:
-          shift: [0, -spacing_x/2]
       ergogen_logo:
         what: ceoloide/utility_ergogen_logo
         where: matrix_ring_bottom
@@ -307,7 +323,65 @@ pcbs:
           scale: 2.5
           reversible: true
         adjust:
-          shift: [3,-16]  
+          shift: [3,-16]
+      # Case holes
+      caseholeThumbHome:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: [thumb_home_only]
+          shift: [10, 3]
+      caseHolePinkyBottom:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: [matrix_pinky_bottom]
+          shift: [10, -2]
+      caseHolePinkyTop:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: [matrix_pinky_top]
+          shift: [10, 5]
+      caseHoleMCU:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: [matrix_inner_top]
+          shift: [33, -6]
+      # Holes for mounting tenting
+      tentingNorth:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: [matrix_middle_top]
+          shift: [9, 3]
+      tentingEast:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: [matrix_middle_top]
+          shift: [9-(tenting_layout_radius/2), -3-(tenting_layout_radius/2)]
+      tentingSouth:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: [matrix_middle_top]
+          shift: [9, -3-(tenting_layout_radius)]
+      tentingWest:
+        what: ceoloide/mounting_hole_plated
+        where:
+          ref: [matrix_middle_top]
+          shift: [9+(tenting_layout_radius/2), -3-(tenting_layout_radius/2)]
+      # Tooling holes for PCBA
+      toolingHoleTopLeft:
+        what: ceoloide/mounting_hole_npth
+        where:
+          ref: [matrix_outer_top]
+          shift: [5, -1.5]
+      toolingHoleTopRight:
+        what: ceoloide/mounting_hole_npth
+        where:
+          ref: [matrix_inner_top]
+          shift: [5, -1.5]
+      toolingHoleBottomRight:
+        what: ceoloide/mounting_hole_npth
+        where:
+          ref: [thumb_outer_only]
+          shift: [5, -1.5]
 cases:
   prototype:
     - what: outline
