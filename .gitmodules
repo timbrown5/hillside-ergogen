@@ -1,0 +1,3 @@
+[submodule "third-party/ceoloide"]
+	path = third-party/ceoloide
+	url = ssh://github.com/timbrown5/ergogen-footprints.git
