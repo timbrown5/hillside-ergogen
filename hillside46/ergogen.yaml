@@ -4,6 +4,10 @@ units:
   # use for Choc spaced keys
   #spacing_x: cx
   #spacing_y: cy
+  #$default_spread: cx
+  #$default_padding: cy
+  #$default_height: cy-1
+  #$default_width: cx-1
   # use for MX spaced keys
   spacing_x: U
   spacing_y: U
@@ -18,7 +22,6 @@ points:
       columns:
         outer:
           key:
-            spread: spacing_x
             splay: 15
             origin: [0, -spacing_y]
             column_net: C0
@@ -26,77 +29,63 @@ points:
           rows:
             bottom:
               row_net: R0
-              bind: [10, 10, 0, 0]
             home:
               row_net: R1
-              bind: [10, 10, 10, 0]
             top:
               row_net: R2
-              bind: [0, 10, 10, 0]
         pinky:
           key:
-            spread: spacing_x
             tags: key
           rows:
             bottom:
               row_net: R0
-              bind: [10, 10, 0, 10]
             home:
               row_net: R1
-              bind: [10, 10, 10, 10]
             top:
               row_net: R2
-              bind: [0, 20, 10, 10]
         ring:
           key:
-            spread: spacing_x
             stagger: 13
+            spread: spacing_x + 1
             splay: -5
             tags: key
+            bound: true
           rows:
             bottom:
               row_net: R0
-              bind: [5, 15, 14, 0]
+              binding: [20, 5, spacing_x, 5]
             home:
               row_net: R1
-              bind: [10, 10, 10, 0]
             top:
               row_net: R2
-              bind: [0, 20, 10, 0]
         middle:
           key:
-            spread: spacing_x
             stagger: 6
+            spread: spacing_x + 1
             splay: -5
             tags: key
+            bound: true
           rows:
             bottom:
               row_net: R0
-              bind: [10, 10, 0, 0]
             home:
               row_net: R1
-              bind: [10, 10, 10, 0]
             top:
               row_net: R2
-              bind: [0, 0, 10, 0]
         index:
           key:
-            spread: spacing_x
             stagger: -5
             tags: key
+            bound: true
           rows:
             bottom:
               row_net: R0
-              bind: [10, 10, 0, 0]
             home:
               row_net: R1
-              bind: [10, 10, 10, 0]
             top:
               row_net: R2
-              bind: [1, 1, 0, 2]
         inner:
           key:
-            spread: spacing_x
             stagger: -2.5
             tags: key
           rows:
@@ -113,21 +102,25 @@ points:
       anchor:
         ref: matrix_index_bottom
         shift: [-10.5,-spacing_y]
+      key:
+        spread: spacing_x + 1
+        bound: true
       columns:
         palm:
           key:
             splay: 0
-            bind: [10, 10, 0, 0]
+            bind: [10, 20, 0, spacing_x*1.5]
             tags: key
           rows:
             only:
               column_net: C1
               row_net: R3
-        inner:
+        outer:
           key:
             splay: -15
+            shift: [0, -0.5]
             origin: [-spacing_x/2, -7]
-            bind: [10, 10, 0, 2]
+            bind: [10, 20, 0, 2]
             tags: key
           rows:
             only:
@@ -137,43 +130,49 @@ points:
           key:
             splay: -15
             origin: [-spacing_x/2, -7]
-            bind: [10, 0, 0, 0]
+            shift: [0, -0.5]
+            bind: [10, 5, 0, 0]
             tags: key
           rows:
             only:
               column_net: C3
               row_net: R3
-        upper:
+        inner:
           key:
-            shift: [-spacing_x, spacing_y]
-            bind: [0, 6, 0, 0]
-            tags: key
-          rows:
-            only:
-              column_net: C4
-              row_net: R3
-        outer:
-          key:
-            origin: [-spacing_x, spacing_y]
-            shift: [-12, -2]
-            bind: [0, 0, 0, 5]
             splay: -15
+            origin: [-spacing_x/2, -7]
+            shift: [0, -0.5]
+            bound: true
             tags: key
           rows:
             only:
               column_net: C5
               row_net: R3
+    thumb_upper:
+      anchor:
+        ref: thumb_home_only
+      columns:
+        home:
+          key:
+            shift: [0, spacing_y]
+            bind: [0, 3, 0, 0]
+            bound: true
+            tags: key
+          rows:
+            only:
+              column_net: C4
+              row_net: R3
     connector:
       anchor:
-        ref: thumb_palm_only
-        shift: [spacing_x*3 + 2, -6]
-        rotate: -90
+        ref: thumb_upper_home_only
+        shift: [spacing_x -5, -4]
+        rotate: -60
       columns:
         trrs:
           key:
             width: 6.5
             height: 12.2
-            bind: [0, 7.5, 8, 8]
+            bind: [2, 10, 4, 8]
             tags: trrs
             padding: 0
             spread: 0
@@ -241,10 +240,10 @@ outlines:
         - matrix_inner_home
         - matrix_inner_top
         - thumb_palm_only
-        - thumb_inner_only
-        - thumb_upper_only
-        - thumb_home_only
         - thumb_outer_only
+        - thumb_home_only
+        - thumb_inner_only
+        - thumb_upper_home_only
         - connector_trrs
       concavity: 50
       expand: -0.5
@@ -270,8 +269,8 @@ pcbs:
           to: GND
           include_corner_marks: true
           include_keycap: true
-          keycap_height: 16.5
-          keycap_width: 17.5
+          keycap_height: spacing_y - 0.5
+          keycap_width: spacing_x - 0.5
           reversible: true
           solder: false
           hotswap: true
@@ -296,15 +295,6 @@ pcbs:
           reversible: true
         adjust:
           shift: [spacing_x+2,6]
-      reset:
-        what: ceoloide/reset_switch_smd_side
-        where:
-          ref: thumb_upper_only
-          rotate: -60
-        params:
-          reversible: true
-        adjust:
-          shift: [-20,13]
       trrs:
         what: ceoloide/trrs_pj320a
         where:
@@ -316,6 +306,14 @@ pcbs:
           TP: VCC # Tip and Ring 1 are joined together
           reversible: true
           symmetric: true
+      reset:
+        what: ceoloide/reset_switch_smd_side
+        where:
+          ref: connector_trrs
+        params:
+          reversible: true
+        adjust:
+          shift: [10,10]
       ergogen_logo:
         what: ceoloide/utility_ergogen_logo
         where: matrix_ring_bottom
