@@ -5,10 +5,14 @@ on:
     paths:
       - "hillside46/ergogen.yaml"
       - ".github/workflows/generate-pcb.yaml"
+      - "package-lock.json"
+      - "package.json"
   pull_request:
     paths:
       - "hillside46/ergogen.yaml"
       - ".github/workflows/generate-pcb.yaml"
+      - "package-lock.json"
+      - "package.json"
   workflow_dispatch:
 
 jobs:
