@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    paths:
+      - ".github/workflows/generate-pcb.yaml"
+      - ".github/workflows/build-hillside46.yaml"
+      - "hillside46/ergogen.yaml"
+      - "package-lock.json"
+      - "package.json"
+  pull_request:
+    paths:
+      - ".github/workflows/generate-pcb.yaml"
+      - ".github/workflows/build-hillside46.yaml"
+      - "hillside46/ergogen.yaml"
+      - "package-lock.json"
+      - "package.json"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Hillside 46
+    uses: ./.github/workflows/generate-pcb.yaml
+    with:
+      keyboard_name: hillside46
+      ergogen_file: hillside46/ergogen.yaml
+    permissions:
+      contents: write
