@@ -80,7 +80,7 @@ jobs:
           gerbers_dir: ${{ steps.paths.outputs.output_dir }}/gerbers/board
 
       - name: Commit generated files
-        uses: stefanzweifel/git-auto-commit-action@7f0d0a7e5f7b5e0f2f4b5a8e5e2c0d5a4f3b2c1 # v7.0.0
+        uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
         with:
           commit_message: "build: generate ${{ inputs.keyboard_name }} files"
           file_pattern: ${{ steps.paths.outputs.output_dir }}/
