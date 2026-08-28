@@ -1,0 +1,21 @@
+name: Build
+
+on:
+  push:
+    paths:
+      - 'hillside46/ergogen.yaml'
+      - '.github/workflows/generate-pcb.yaml'
+  pull_request:
+    paths:
+      - 'hillside46/ergogen.yaml'
+      - '.github/workflows/generate-pcb.yaml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      keyboard_name: hillside46
+      ergogen_file: hillside46/ergogen.yaml
+    permissions:
+      contents: write
