@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "gen": "ergogen -d ."
+    "gen": "ergogen"
   },
   "dependencies": {
     "ergogen": "github:ergogen/ergogen#v4.2.1"

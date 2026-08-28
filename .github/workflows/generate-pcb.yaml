@@ -40,7 +40,7 @@ jobs:
           echo "output_dir=${ergogen_dir}" >> "$GITHUB_OUTPUT"
 
       - name: Generate unrouted PCBs
-        run: npm run gen -- "${{ inputs.ergogen_file }}"
+        run: npm run gen -- "${{ inputs.ergogen_file }}" -o "${{ steps.paths.outputs.output_dir }}"
 
       - name: Export DSN for main PCB
         uses: ./.github/actions/export-dsn
