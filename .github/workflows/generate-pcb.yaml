@@ -7,8 +7,8 @@ on:
         description: Name of the keyboard
         required: true
         type: string
-      ergogen_file:
-        description: Path to the Ergogen input file
+      keyboard_dir:
+        description: The parent directory of the Ergogen config.yaml
         required: true
         type: string
 
@@ -34,58 +34,51 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Determine output directory
-        id: paths
-        shell: bash
-        run: |
-          ergogen_dir="$(basename "${{ inputs.ergogen_file }}" '.yaml')"
-          echo "output_dir=${ergogen_dir}" >> "$GITHUB_OUTPUT"
-
       - name: Ergogen help
         run: npm run gen -- --help
 
       - name: Generate unrouted PCBs
-        run: npm run gen -- "${{ inputs.ergogen_file }}" -o "${{ steps.paths.outputs.output_dir }}"
+        run: npm run gen -- "${{ inputs.ergogen_file }}" -o "${{ inputs.keyboard_name }}"
 
       - name: Export DSN for main PCB
         uses: ./.github/actions/export-dsn
         with:
-          pcb_file: ${{ steps.paths.outputs.output_dir }}/pcbs/board.kicad_pcb
-          dsn_file: ${{ steps.paths.outputs.output_dir }}/pcbs/board.dsn
+          pcb_file: ${{ inputs.keyboard_name }}/pcbs/board.kicad_pcb
+          dsn_file: ${{ inputs.keyboard_name }}/pcbs/board.dsn
 
       - name: Autoroute main PCB
         uses: ./.github/actions/autoroute
         with:
-          dsn_file: ${{ steps.paths.outputs.output_dir }}/pcbs/board.dsn
-          ses_file: ${{ steps.paths.outputs.output_dir }}/pcbs/board.ses
+          dsn_file: ${{ inputs.keyboard_name }}/pcbs/board.dsn
+          ses_file: ${{ inputs.keyboard_name }}/pcbs/board.ses
 
       - name: Import SES into main PCB
         uses: ./.github/actions/import-ses
         with:
-          pcb_input_file: ${{ steps.paths.outputs.output_dir }}/pcbs/board.kicad_pcb
-          pcb_output_file: ${{ steps.paths.outputs.output_dir }}/pcbs/board_routed.kicad_pcb
-          ses_file: ${{ steps.paths.outputs.output_dir }}/pcbs/board.ses
+          pcb_input_file: ${{ inputs.keyboard_name }}/pcbs/board.kicad_pcb
+          pcb_output_file: ${{ inputs.keyboard_name }}/pcbs/board_routed.kicad_pcb
+          ses_file: ${{ inputs.keyboard_name }}/pcbs/board.ses
 
       - name: Export Gerbers for top plate
         uses: ./.github/actions/export-gerbers
         with:
-          pcb_file: ${{ steps.paths.outputs.output_dir }}/pcbs/top_plate.kicad_pcb
-          gerbers_dir: ${{ steps.paths.outputs.output_dir }}/gerbers/top_plate
+          pcb_file: ${{ inputs.keyboard_name }}/pcbs/top_plate.kicad_pcb
+          gerbers_dir: ${{ inputs.keyboard_name }}/gerbers/top_plate
 
       - name: Export Gerbers for bottom plate
         uses: ./.github/actions/export-gerbers
         with:
-          pcb_file: ${{ steps.paths.outputs.output_dir }}/pcbs/bottom_plate.kicad_pcb
-          gerbers_dir: ${{ steps.paths.outputs.output_dir }}/gerbers/bottom_plate
+          pcb_file: ${{ inputs.keyboard_name }}/pcbs/bottom_plate.kicad_pcb
+          gerbers_dir: ${{ inputs.keyboard_name }}/gerbers/bottom_plate
 
       - name: Export Gerbers for main PCB
         uses: ./.github/actions/export-gerbers
         with:
-          pcb_file: ${{ steps.paths.outputs.output_dir }}/pcbs/board.kicad_pcb
-          gerbers_dir: ${{ steps.paths.outputs.output_dir }}/gerbers/board
+          pcb_file: ${{ inputs.keyboard_name }}/pcbs/board.kicad_pcb
+          gerbers_dir: ${{ inputs.keyboard_name }}/gerbers/board
 
       - name: Commit generated files
         uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
         with:
           commit_message: "build: generate ${{ inputs.keyboard_name }} files"
-          file_pattern: ${{ steps.paths.outputs.output_dir }}/
+          file_pattern: ${{ inputs.keyboard_name }}/
