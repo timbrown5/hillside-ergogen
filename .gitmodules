@@ -1,3 +1,3 @@
 [submodule "footprints/ceoloide"]
-	path = hillside46/footprints/ceoloide
+	path = footprints/ceoloide
 	url = git@github.com:timbrown5/ergogen-footprints.git
