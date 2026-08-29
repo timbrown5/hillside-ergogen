@@ -5,16 +5,14 @@ on:
     paths:
       - ".github/workflows/generate-pcb.yaml"
       - ".github/workflows/build-hillside46.yaml"
-      - "footprints/**"
-      - "hillside46.yaml"
+      - "hillside46/**"
       - "package-lock.json"
       - "package.json"
   pull_request:
     paths:
       - ".github/workflows/generate-pcb.yaml"
       - ".github/workflows/build-hillside46.yaml"
-      - "footprints/**"
-      - "hillside46.yaml"
+      - "hillside46/**"
       - "package-lock.json"
       - "package.json"
   workflow_dispatch:
