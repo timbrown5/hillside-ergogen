@@ -38,7 +38,7 @@ jobs:
         run: npm run gen -- --help
 
       - name: Generate unrouted PCBs
-        run: npm run gen -- "${{ inputs.ergogen_file }}" -o "${{ inputs.keyboard_name }}"
+        run: npm run gen -- "${{ inputs.keyboard_dir }}" -o "${{ inputs.keyboard_name }}"
 
       - name: Export DSN for main PCB
         uses: ./.github/actions/export-dsn
