@@ -6,7 +6,7 @@ on:
       - ".github/workflows/generate-pcb.yaml"
       - ".github/workflows/build-hillside46.yaml"
       - "footprints/**"
-      - "hillside46/ergogen.yaml"
+      - "hillside46.yaml"
       - "package-lock.json"
       - "package.json"
   pull_request:
@@ -14,7 +14,7 @@ on:
       - ".github/workflows/generate-pcb.yaml"
       - ".github/workflows/build-hillside46.yaml"
       - "footprints/**"
-      - "hillside46/ergogen.yaml"
+      - "hillside46.yaml"
       - "package-lock.json"
       - "package.json"
   workflow_dispatch:
