@@ -25,6 +25,6 @@ jobs:
     uses: ./.github/workflows/generate-pcb.yaml
     with:
       keyboard_name: hillside46
-      ergogen_file: hillside46/ergogen.yaml
+      ergogen_file: hillside46.yaml
     permissions:
       contents: write
