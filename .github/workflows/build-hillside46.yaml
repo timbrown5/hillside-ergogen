@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/generate-pcb.yaml"
       - ".github/workflows/build-hillside46.yaml"
+      - "footprints/**"
       - "hillside46/ergogen.yaml"
       - "package-lock.json"
       - "package.json"
@@ -12,6 +13,7 @@ on:
     paths:
       - ".github/workflows/generate-pcb.yaml"
       - ".github/workflows/build-hillside46.yaml"
+      - "footprints/**"
       - "hillside46/ergogen.yaml"
       - "package-lock.json"
       - "package.json"
