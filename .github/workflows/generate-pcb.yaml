@@ -38,10 +38,10 @@ jobs:
         id: paths
         shell: bash
         run: |
-          ergogen_dir="$(dirname "${{ inputs.ergogen_file }}")"
+          ergogen_dir="$(basename "${{ inputs.ergogen_file }}" '.yaml')"
           echo "output_dir=${ergogen_dir}" >> "$GITHUB_OUTPUT"
 
-      - name: Generate unrouted PCBs
+      - name: Ergogen help
         run: npm run gen -- --help
 
       - name: Generate unrouted PCBs
