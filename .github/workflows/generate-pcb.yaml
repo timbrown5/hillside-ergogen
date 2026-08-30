@@ -40,8 +40,8 @@ jobs:
       - name: Generate unrouted PCBs
         run: npm run gen -- "${{ inputs.keyboard_dir }}" -o "${{ inputs.keyboard_name }}"
 
-      - name: Git status PCBs
-        run: git status --short
+      - name: git ls-files PCBs
+        run: git ls-files
 
       - name: Export DSN file for Freerouting
         uses: ./.github/actions/export-dsn
@@ -49,8 +49,8 @@ jobs:
           boards: ${{ inputs.keyboard_name}}
           keyboard_dir: ${{ inputs.keyboard_dir }}
 
-      - name: Git status DSN
-        run: git status --short
+      - name: git ls-files DSN
+        run: git ls-files
 
       - name: Autoroute main PCB
         uses: ./.github/actions/autoroute
@@ -58,8 +58,8 @@ jobs:
           boards: ${{ inputs.keyboard_name }}
           keyboard_dir: ${{ inputs.keyboard_dir }}
 
-      - name: Git status Autoroute
-        run: git status --short
+      - name: git ls-files Autoroute
+        run: git ls-files
 
       - name: Import SES into main PCB
         uses: ./.github/actions/import-ses
@@ -67,8 +67,8 @@ jobs:
           boards: ${{ inputs.keyboard_name}}
           keyboard_dir: ${{ inputs.keyboard_dir }}
 
-      - name: Git status SES
-        run: git status --short
+      - name: git ls-files SES
+        run: git ls-files
 
       - name: Export Gerbers for main PCB
         uses: ./.github/actions/export-gerbers
@@ -76,8 +76,8 @@ jobs:
           pcb_file: ${{ inputs.keyboard_name }}/pcbs/${{ inputs.keyboard_name}}.kicad_pcb
           gerbers_dir: ${{ inputs.keyboard_name }}/gerbers
 
-      - name: Git status SES
-        run: git status --short
+      - name: git ls-files SES
+        run: git ls-files
 
       - name: Extract branch name
         shell: bash
