@@ -3,6 +3,7 @@ name: Build
 on:
   push:
     paths:
+      - ".github/actions/**"
       - ".github/workflows/generate-pcb.yaml"
       - ".github/workflows/build-hillside46.yaml"
       - "hillside46/**"
@@ -10,6 +11,7 @@ on:
       - "package.json"
   pull_request:
     paths:
+      - ".github/actions/**"
       - ".github/workflows/generate-pcb.yaml"
       - ".github/workflows/build-hillside46.yaml"
       - "hillside46/**"
