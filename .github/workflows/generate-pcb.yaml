@@ -40,42 +40,29 @@ jobs:
       - name: Generate unrouted PCBs
         run: npm run gen -- "${{ inputs.keyboard_dir }}" -o "${{ inputs.keyboard_name }}"
 
-      - name: Export DSN for main PCB
+      - name: Export DSN file for Freerouting
         uses: ./.github/actions/export-dsn
         with:
-          pcb_file: ${{ inputs.keyboard_name }}/pcbs/board.kicad_pcb
-          dsn_file: ${{ inputs.keyboard_name }}/pcbs/board.dsn
+          boards: ${{ inputs.keyboard_name}}
+          keyboard_dir: ${{ inputs.keyboard_dir }}
 
       - name: Autoroute main PCB
         uses: ./.github/actions/autoroute
         with:
-          dsn_file: ${{ inputs.keyboard_name }}/pcbs/board.dsn
-          ses_file: ${{ inputs.keyboard_name }}/pcbs/board.ses
+          boards: ${{ inputs.keyboard_name }}
+          keyboard_dir: ${{ inputs.keyboard_dir }}
 
       - name: Import SES into main PCB
         uses: ./.github/actions/import-ses
         with:
-          pcb_input_file: ${{ inputs.keyboard_name }}/pcbs/board.kicad_pcb
-          pcb_output_file: ${{ inputs.keyboard_name }}/pcbs/board_routed.kicad_pcb
-          ses_file: ${{ inputs.keyboard_name }}/pcbs/board.ses
-
-      - name: Export Gerbers for top plate
-        uses: ./.github/actions/export-gerbers
-        with:
-          pcb_file: ${{ inputs.keyboard_name }}/pcbs/top_plate.kicad_pcb
-          gerbers_dir: ${{ inputs.keyboard_name }}/gerbers/top_plate
-
-      - name: Export Gerbers for bottom plate
-        uses: ./.github/actions/export-gerbers
-        with:
-          pcb_file: ${{ inputs.keyboard_name }}/pcbs/bottom_plate.kicad_pcb
-          gerbers_dir: ${{ inputs.keyboard_name }}/gerbers/bottom_plate
+          boards: ${{ inputs.keyboard_name}}
+          keyboard_dir: ${{ inputs.keyboard_dir }}
 
       - name: Export Gerbers for main PCB
         uses: ./.github/actions/export-gerbers
         with:
-          pcb_file: ${{ inputs.keyboard_name }}/pcbs/board.kicad_pcb
-          gerbers_dir: ${{ inputs.keyboard_name }}/gerbers/board
+          pcb_file: ${{ inputs.keyboard_name }}/pcbs/${{ inputs.keyboard_name}}.kicad_pcb
+          gerbers_dir: ${{ inputs.keyboard_name }}/gerbers
 
       - name: Commit generated files
         uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0

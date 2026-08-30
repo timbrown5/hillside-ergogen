@@ -1,0 +1,29 @@
+name: "Import SES to Kicad"
+description: "Import Specctra SES into a Kicad PCB"
+inputs:
+  keyboard_dir:
+    description: The parent directory of the Ergogen config.yaml
+    required: true
+    type: string
+  boards:
+    description: "Board name"
+    required: true
+runs:
+  using: "docker"
+  image: "docker://ghcr.io/inti-cmnb/kicad8_auto@sha256:bc23a40bdd1beeb0b15738df902c3c434fa8d6e89d34a1903b67952d004bdce6" # v1.9.1
+  args:
+    - "-c"
+    - |
+      cd ${{ inputs.keyboard_dir }}
+      for board in ${{ inputs.boards }};
+      do
+        echo "Processing $board";
+        if [ -e $GITHUB_WORKSPACE/pcbs/${board}_autorouted.kicad_pcb ]; then
+          echo "Cleaning up $GITHUB_WORKSPACE/pcbs/${board}_autorouted.kicad_pcb";
+          rm -f $GITHUB_WORKSPACE/pcbs/${board}_autorouted.kicad_pcb;
+        fi
+        if [ -e $GITHUB_WORKSPACE/pcbs/${board}.ses ]; then
+          echo "Import SES";
+          $GITHUB_WORKSPACE/kibot/import_ses.py -b $GITHUB_WORKSPACE/pcbs/${board}.kicad_pcb -s $GITHUB_WORKSPACE/pcbs/${board}.ses -o $GITHUB_WORKSPACE/pcbs/${board}_autorouted.kicad_pcb
+        fi
+      done
