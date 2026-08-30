@@ -50,7 +50,10 @@ jobs:
           keyboard_dir: ${{ inputs.keyboard_dir }}
 
       - name: git ls-files DSN
-        run: git ls-files
+        run: |
+          git ls-files
+          ls -la hillside46
+          ls -la hillside46/pcbs
 
       - name: Autoroute main PCB
         uses: ./.github/actions/autoroute
