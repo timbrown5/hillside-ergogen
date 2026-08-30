@@ -1,0 +1,25 @@
+name: "Autoroute"
+description: "Autoroute a given DSN file to SES with FreeRouting"
+inputs:
+  boards:
+    description: "Specctra SES output file"
+    required: true
+runs:
+  using: "docker"
+  image: "docker://ghcr.io/freerouting/freerouting@sha256:0d010c6bf13b562551e8cb41fb298090006033fa2850e5bfc678c98ecf47111e" # 2.2.4
+  entrypoint: "/bin/sh"
+  args:
+    - "-c"
+    - |
+      for board in ${{ inputs.boards }};
+      do
+        echo "Processing $board";
+        if [ -e pcbs/${board}.ses ]; then
+          echo "Cleaning up pcbs/${board}.ses";
+          rm -f pcbs/${board}.ses;
+        fi
+        if [ -e pcbs/${board}.dsn ]; then
+          echo "Autoroute PCB";
+          java -jar /opt/freerouting.jar -de pcbs/${board}.dsn -do pcbs/${board}.ses -dr ./freerouting/freerouting.rules --user-data-path ./freerouting -mp 25 -mt 1 -dct 0 --gui.enabled=false --profile.email=marco.massarelli@gmail.com
+        fi
+      done

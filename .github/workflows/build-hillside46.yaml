@@ -7,8 +7,8 @@ on:
       - ".github/workflows/generate-pcb.yaml"
       - ".github/workflows/build-hillside46.yaml"
       - "hillside46/**"
-      - "kibot/*"
-      - "freerouting/*"
+      - "kibot/**"
+      - "freerouting/**"
       - "package-lock.json"
       - "package.json"
   pull_request:
@@ -17,8 +17,8 @@ on:
       - ".github/workflows/generate-pcb.yaml"
       - ".github/workflows/build-hillside46.yaml"
       - "hillside46/**"
-      - "kibot/*"
-      - "freerouting/*"
+      - "kibot/**"
+      - "freerouting/**"
       - "package-lock.json"
       - "package.json"
   workflow_dispatch:
