@@ -41,7 +41,7 @@ jobs:
         run: npm run gen -- "${{ inputs.keyboard_dir }}" -o "${{ inputs.keyboard_name }}"
 
       - name: Git status PCBs
-        run: git status
+        run: git status --short
 
       - name: Export DSN file for Freerouting
         uses: ./.github/actions/export-dsn
@@ -50,7 +50,7 @@ jobs:
           keyboard_dir: ${{ inputs.keyboard_dir }}
 
       - name: Git status DSN
-        run: git status
+        run: git status --short
 
       - name: Autoroute main PCB
         uses: ./.github/actions/autoroute
@@ -59,7 +59,7 @@ jobs:
           keyboard_dir: ${{ inputs.keyboard_dir }}
 
       - name: Git status Autoroute
-        run: git status
+        run: git status --short
 
       - name: Import SES into main PCB
         uses: ./.github/actions/import-ses
@@ -68,7 +68,7 @@ jobs:
           keyboard_dir: ${{ inputs.keyboard_dir }}
 
       - name: Git status SES
-        run: git status
+        run: git status --short
 
       - name: Export Gerbers for main PCB
         uses: ./.github/actions/export-gerbers
@@ -77,7 +77,7 @@ jobs:
           gerbers_dir: ${{ inputs.keyboard_name }}/gerbers
 
       - name: Git status SES
-        run: git status
+        run: git status --short
 
       - name: Extract branch name
         shell: bash
