@@ -10,7 +10,8 @@ inputs:
     required: true
 runs:
   using: "docker"
-  image: "docker://docker.io/kicad/kicad@sha256:5716d82aa247abdbe512650eb4e8fce5a4031cbbef0a2c8df83208a69fef87b2" # v8.0.9
+  #image: "docker://docker.io/kicad/kicad@sha256:5716d82aa247abdbe512650eb4e8fce5a4031cbbef0a2c8df83208a69fef87b2" # v8.0.9
+  image: "docker://ghcr.io/inti-cmnb/kicad8_auto@sha256:bc23a40bdd1beeb0b15738df902c3c434fa8d6e89d34a1903b67952d004bdce6" # v1.9.1
   entrypoint: "/bin/bash"
   args:
     - "-c"
