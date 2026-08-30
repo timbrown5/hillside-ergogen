@@ -1,0 +1,30 @@
+name: "Export DSN"
+description: "Export Specctra DSN from a Kicad PCB"
+inputs:
+  keyboard_dir:
+    description: The parent directory of the Ergogen config.yaml
+    required: true
+    type: string
+  boards:
+    description: "KiCad PCB names"
+    required: true
+runs:
+  using: "docker"
+  image: "docker://hub.docker.io/kicad/kicad@sha256:5716d82aa247abdbe512650eb4e8fce5a4031cbbef0a2c8df83208a69fef87b2" # v8.0.9
+  entrypoint: "/bin/bash"
+  args:
+    - "-c"
+    - |
+      cd ${{ inputs.keyboard_dir }}
+      for board in ${{ inputs.boards }};
+      do
+        echo "Processing $board";
+        if [ -e $GITHUB_WORKSPACE/pcbs/${board}.dsn ]; then
+          echo "Cleaning up $GITHUB_WORKSPACE/pcbs/${board}.dsn";
+          rm -f $GITHUB_WORKSPACE/pcbs/${board}.dsn;
+        fi
+        if [ -e pcbs/${board}.kicad_pcb ]; then
+          echo "Export DSN";
+          $GITHUB_WORKSPACE/kibot/export_dsn.py -b $GITHUB_WORKSPACE/pcbs/${board}.kicad_pcb -o $GITHUB_WORKSPACE/pcbs/${board}.dsn
+        fi
+      done
