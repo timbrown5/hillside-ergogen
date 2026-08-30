@@ -40,11 +40,17 @@ jobs:
       - name: Generate unrouted PCBs
         run: npm run gen -- "${{ inputs.keyboard_dir }}" -o "${{ inputs.keyboard_name }}"
 
+      - name: Git status PCBs
+        run: git status
+
       - name: Export DSN file for Freerouting
         uses: ./.github/actions/export-dsn
         with:
           boards: ${{ inputs.keyboard_name}}
           keyboard_dir: ${{ inputs.keyboard_dir }}
+
+      - name: Git status DSN
+        run: git status
 
       - name: Autoroute main PCB
         uses: ./.github/actions/autoroute
@@ -52,11 +58,17 @@ jobs:
           boards: ${{ inputs.keyboard_name }}
           keyboard_dir: ${{ inputs.keyboard_dir }}
 
+      - name: Git status Autoroute
+        run: git status
+
       - name: Import SES into main PCB
         uses: ./.github/actions/import-ses
         with:
           boards: ${{ inputs.keyboard_name}}
           keyboard_dir: ${{ inputs.keyboard_dir }}
+
+      - name: Git status SES
+        run: git status
 
       - name: Export Gerbers for main PCB
         uses: ./.github/actions/export-gerbers
@@ -64,8 +76,17 @@ jobs:
           pcb_file: ${{ inputs.keyboard_name }}/pcbs/${{ inputs.keyboard_name}}.kicad_pcb
           gerbers_dir: ${{ inputs.keyboard_name }}/gerbers
 
+      - name: Git status SES
+        run: git status
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
       - name: Commit generated files
         uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
         with:
           commit_message: "build: generate ${{ inputs.keyboard_name }} files"
           file_pattern: ${{ inputs.keyboard_name }}/
+          branch: ${{ steps.extract_branch.outputs.branch }}
